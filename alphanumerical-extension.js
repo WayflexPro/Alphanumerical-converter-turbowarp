@@ -5,7 +5,7 @@
      \ V  V / (_) | | | |  _| (_) | | |  __/ 
       \_/\_/ \___/|_| |_|_|  \___/|_|  \___| 
 
-          Alphanumerical converter ig lol
+          Alphanumerical converter hehehehehehehe
 */
 
 class AlphanumericalConverter {
