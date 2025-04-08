@@ -10,6 +10,12 @@
           Alphanumerical converter hehehehehehehe
 */
 
+// Name: Alphanumerical Converter
+// ID: alphanumericalConverter
+// Description: A TurboWarp extension that abbreviates, expands, and compares large numbers.
+// By: Wayflex <https://scratch.mit.edu/users/KEDeX/>
+// License: GPL-3.0
+
 class AlphanumericalConverter {
     constructor(runtime) {
         this.runtime = runtime;
