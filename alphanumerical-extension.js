@@ -106,27 +106,37 @@ class AlphanumericalConverter {
     }
     shortenNumber(args) {
         const num = Number(args.NUMBER);
-        if (num < 1000) return String(num);
+        const abs = Math.abs(num);
+        if (abs < 1000) return String(num);
         let chosen = this.suffixes[0];
         for (let i = 1; i < this.suffixes.length; i++) {
-            if (num >= this.suffixes[i].multiplier) { chosen = this.suffixes[i]; } else break;
+            if (abs >= this.suffixes[i].multiplier) {
+                chosen = this.suffixes[i];
+            } else break;
         }
-        const shortNum = Math.floor(num / (chosen.multiplier / 10)) / 10;
-        return shortNum + chosen.suffix;
+        const shortNum = Math.floor(abs / (chosen.multiplier / 10)) / 10;
+        return (num < 0 ? "-" : "") + shortNum + chosen.suffix;
     }
+
     expandNumber(args) {
         let shortStr = String(args.SHORT).trim();
-        const match = shortStr.match(/^([0-9]*\.?[0-9]+)([A-Za-z]+)?$/);
+        const match = shortStr.match(/^(-?[0-9]*\.?[0-9]+)([A-Za-z]+)?$/);
         if (!match) return 0;
-        let value = Number(match[1]), suffix = match[2] || "", multiplier = 1;
+        let value = Number(match[1]),
+            suffix = match[2] || "",
+            multiplier = 1;
         for (const entry of this.suffixes) {
-            if (entry.suffix.toLowerCase() === suffix.toLowerCase()) { multiplier = entry.multiplier; break; }
+            if (entry.suffix.toLowerCase() === suffix.toLowerCase()) {
+                multiplier = entry.multiplier;
+                break;
+            }
         }
         return Math.floor(value * multiplier);
     }
+
     isValidShort(args) {
         let shortStr = String(args.SHORT).trim();
-        const match = shortStr.match(/^([0-9]*\.?[0-9]+)([A-Za-z]*)$/);
+        const match = shortStr.match(/^(-?[0-9]*\.?[0-9]+)([A-Za-z]*)$/);
         if (!match) return false;
         let suffix = match[2] || "";
         for (const entry of this.suffixes) {
@@ -207,14 +217,15 @@ class AlphanumericalConverter {
     }
     shortenNumberPrecision(args) {
         const num = Number(args.NUMBER), decimals = Number(args.DECIMALS);
-        if (num < 1000) return String(num);
+        const abs = Math.abs(num);
+        if (abs < 1000) return String(num);
         let chosen = this.suffixes[0];
         for (let i = 1; i < this.suffixes.length; i++) {
-            if (num >= this.suffixes[i].multiplier) { chosen = this.suffixes[i]; } else break;
+            if (abs >= this.suffixes[i].multiplier) { chosen = this.suffixes[i]; } else break;
         }
         const factor = Math.pow(10, decimals);
-        const shortNum = Math.floor(num / (chosen.multiplier / factor)) / factor;
-        return shortNum + chosen.suffix;
+        const shortNum = Math.floor(abs / (chosen.multiplier / factor)) / factor;
+        return (num < 0 ? "-" : "") + shortNum + chosen.suffix;
     }
     digitCount(args) {
         const num = Math.floor(Math.abs(Number(args.NUMBER)));
