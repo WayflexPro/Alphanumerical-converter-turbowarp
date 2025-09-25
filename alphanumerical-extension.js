@@ -72,6 +72,11 @@ class AlphanumericalConverter {
             { suffix: "OQg", multiplier: 1e147 },
             { suffix: "NQg", multiplier: 1e150 }
         ];
+
+        this.suffixMap = new Map();
+        for (const { suffix, multiplier } of this.suffixes) {
+            this.suffixMap.set(suffix.toLowerCase(), multiplier);
+        }
     }
 
     getInfo() {
@@ -123,14 +128,8 @@ class AlphanumericalConverter {
         const match = shortStr.match(/^(-?[0-9]*\.?[0-9]+)([A-Za-z]+)?$/);
         if (!match) return 0;
         let value = Number(match[1]),
-            suffix = match[2] || "",
-            multiplier = 1;
-        for (const entry of this.suffixes) {
-            if (entry.suffix.toLowerCase() === suffix.toLowerCase()) {
-                multiplier = entry.multiplier;
-                break;
-            }
-        }
+            suffix = match[2] || "";
+        const multiplier = this.suffixMap.get(suffix.toLowerCase()) || 1;
         return Math.floor(value * multiplier);
     }
 
@@ -139,10 +138,7 @@ class AlphanumericalConverter {
         const match = shortStr.match(/^(-?[0-9]*\.?[0-9]+)([A-Za-z]*)$/);
         if (!match) return false;
         let suffix = match[2] || "";
-        for (const entry of this.suffixes) {
-            if (entry.suffix.toLowerCase() === suffix.toLowerCase()) return true;
-        }
-        return false;
+        return this.suffixMap.has(suffix.toLowerCase());
     }
     sciToShort(args) {
         let sciStr = String(args.SCI).trim(), num = Number(sciStr);
